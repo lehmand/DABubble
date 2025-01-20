@@ -1,0 +1,229 @@
+mat-card{
+position: absolute;
+z-index: 110;
+} 
+
+.main-content{
+  display: flex;
+  justify-content: center;
+}
+
+.page-content-plus-header {
+  filter: blur(2px);
+  transition: filter 0.3s ease;
+}
+
+.full-page-content {
+  height: 100vh;
+  display: flex;
+  // justify-content: center;
+  max-width: 2000px;
+  gap: 32px;
+  width: 98%;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+.overlay-ws{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+.login-sended-info {
+  width: fit-content;
+  background-color: #444df2;
+  color: white;
+  box-shadow: 0px 6px 10px 0px #00000033;
+  padding: 8px 12px;
+  z-index: 999;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  transform: translateX(500px);
+  transition: transform 0.5s ease-in-out;
+  border-bottom-right-radius: unset;
+}
+
+.login-sended-info.visible {
+  transform: translateX(0);
+}
+
+.login-sended-info.hidden {
+  transform: translateX(500px);
+}
+
+.success-login-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.sended-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Nunito";
+  font-size: 20px;
+}
+
+.guest-or-mail {
+  margin-left: 6px;
+}
+
+app-thread {
+  max-width: 485px;
+  width: 100%;
+  max-height: 940px;
+  height: 100%;
+  border-radius: 30px;
+  box-shadow: 0px 2px 10px 0px #00000014;
+  background-color: white;
+}
+
+.workspace-opener {
+  cursor: pointer;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  left: -122px;
+  z-index: 10;
+  top: 50%;
+  transform: rotate(-90deg);
+  width: 300px;
+  background-color: white;
+  padding: 12px;
+  gap: 10px;
+  border-bottom-right-radius: 30px;
+  border-bottom-left-radius: 30px;
+  box-shadow: 4px 4px 7px 0px #00000033;
+}
+
+.workspace-opener {
+  &:hover  p {
+    color: #444df2;
+  }
+}
+
+.workspace-closed {
+  width: 0;
+  overflow-x: hidden;
+  transition: all 175ms ease-in-out;
+}
+
+.workspace-open {
+  width: 366px;
+  transition: all 175ms ease-in-out;
+}
+
+.workspace-drawer {
+  transform: rotate(90deg);
+} 
+
+ .startScreen-open{
+  display: unset;
+  width: 100%;
+ } 
+
+
+app-start-screen{
+  width: 98%;
+}  
+ 
+@media(max-width:1900px){ 
+  .full-page-content.reset-gap{
+  gap: 16px;
+  } 
+
+  app-start-screen.hiddenFullWidth{
+    width: 0;
+    overflow-x: hidden;
+    transition: all 175ms ease-in-out;
+    gap: unset;
+  } 
+  
+  app-start-screen.display-show{
+    display: unset;
+    width: 100%;
+    transition: all 175ms ease-in-out;
+  }
+
+  app-thread.hiddenMax-Width{
+    max-width: unset;
+  }
+  app-thread.display-hidden{
+    display: none;
+  }
+}
+   
+
+@media(max-width:1200px){
+  app-start-screen{
+    display: none;
+  } 
+   
+  app-start-screen.hiddenFullWidth{
+    width: 100%;
+  }
+  
+
+  .full-page-content{
+    gap:0;
+  }
+
+  .workspace-open {
+    width: 100%;
+    transition: all 175ms ease-in-out;
+  } 
+
+  .workspace-open.close-box{
+    width: 0;
+    transition: all 175ms ease-in-out;
+    overflow-x: hidden;
+    margin-left:0;
+   }
+   
+   .workspace-open.open-box{
+     width: 100%;
+     transition: all 175ms ease-in-out;
+    //  margin-left: 17px;
+   }  
+
+   app-thread {
+    display: none;
+   }
+
+   .openThread{
+    display: unset;
+    max-width: unset;
+   } 
+
+   .startScreen-open.hidden{
+     display: none;
+   } 
+
+   .thread-hidden{
+    display: none;
+   }
+
+
+  //  app-start-screen.display-show{
+  //   display: none;
+  //   width: 0;
+  //   transition: all 175ms ease-in-out;
+  // }
+   
+}
