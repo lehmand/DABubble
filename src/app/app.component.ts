@@ -9,9 +9,6 @@ import { AuthService } from './services/auth.service';
   standalone: true,
   imports: [
     RouterOutlet,
-    ImpressumComponent,
-    PrivacyPolicyComponent,
-
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -27,6 +24,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.handleRedirectResult()
+    this.authService.initializeAuth().then(() => {
+    console.log('Auth-Initialisierung abgeschlossen');
+  });
   }
 }

@@ -42,6 +42,7 @@ export class AuthService implements OnInit {
   loggedOut = false;
   globalVariable = inject(GlobalVariableService);
   isGuest = false;
+  private redirectInProgress = false;
 
   constructor() {
     this.initAuthListener();
@@ -55,9 +56,7 @@ export class AuthService implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    
-  }
+  ngOnInit(): void {}
 
   initAuthListener() {
     const auth = getAuth();
@@ -100,50 +99,139 @@ export class AuthService implements OnInit {
   }
 
   async googleLogIn() {
-    const provider = new GoogleAuthProvider();
-    const auth = getAuth();
-    provider.addScope('email');
-
-    signInWithRedirect(auth, provider);
+  const auth = getAuth();
+  const provider = new GoogleAuthProvider();
+  provider.addScope('email');
+  
+  // Markiere, dass ein Redirect im Gange ist
+  localStorage.setItem('redirectInProgress', 'true');
+  
+  try {
+    // Tatsächlicher Redirect
+    console.log('Starte Google-Login-Redirect...');
+    await signInWithRedirect(auth, provider);
+    // Dieser Code wird nie erreicht, da der Redirect die Seite neu lädt
+  } catch (error) {
+    console.error('Fehler beim Login-Redirect:', error);
+    localStorage.removeItem('redirectInProgress');
   }
+}
 
-  async handleRedirectResult() {
-    console.log('Hello from redirect')
-    const auth = getAuth();
+  async handleAuthState() {
+  const auth = getAuth();
+  const currentUser = auth.currentUser;
+  
+  console.log('Aktueller Benutzer:', currentUser);
+  
+  // Prüfe, ob ein Redirect im Gange war
+  const redirectPending = localStorage.getItem('redirectInProgress') === 'true';
+  console.log('Redirect pending:', redirectPending);
+  
+  if (redirectPending && currentUser) {
+    console.log('Benutzer nach Redirect authentifiziert, verarbeite...');
+    
     try {
+      // Zuerst versuchen, das Redirect-Ergebnis zu bekommen
       const result = await getRedirectResult(auth);
-
-      if (result) {
-        const user = result.user;
-        const googleProviderData = user.providerData.find(
-          (data) => data.providerId === 'google.com'
-        );
-        const email = googleProviderData?.email;
-
-        if (user.photoURL) {
-          localStorage.setItem(`userPhoto_${user.uid}`, user.photoURL);
-        }
-
-        this.user = new User({
-          picture: user.photoURL,
-          uid: user.uid,
-          name: user.displayName,
-          email: email,
-        });
-
-        await this.addGoogleUserToFirestore(this.user);
+      console.log('Redirect-Ergebnis:', result);
+      
+      // Selbst wenn result null ist, können wir mit dem currentUser arbeiten
+      const user = result?.user || currentUser;
+      
+      // Google-Provider-Daten extrahieren
+      const googleProviderData = user.providerData.find(
+        (data) => data.providerId === 'google.com'
+      );
+      
+      // Wenn es Google-Provider-Daten gibt, handelt es sich um einen Google-Login
+      const isGoogleLogin = !!googleProviderData;
+      
+      // E-Mail aus Provider-Daten oder direkt vom Benutzer
+      const email = googleProviderData?.email || user.email;
+      
+      if (user.photoURL) {
+        localStorage.setItem(`userPhoto_${user.uid}`, user.photoURL);
+      }
+      
+      this.user = new User({
+        picture: user.photoURL,
+        uid: user.uid,
+        name: user.displayName,
+        email: email,
+      });
+      
+      await this.addGoogleUserToFirestore(this.user);
+      
+      if (isGoogleLogin) {
         this.globalVariable.googleAccountLogIn = true;
-        this.LogInAuth.setLoginSuccessful(true);
-        this.router.navigate(['/welcome', this.user.uid]);
+      }
+      
+      this.LogInAuth.setLoginSuccessful(true);
+      
+      // Navigiere zur Welcome-Seite
+      this.router.navigate(['/welcome', user.uid]);
+      
+      setTimeout(() => {
+        this.LogInAuth.setLoginSuccessful(false);
+      }, 1500);
+      
+      // Status aktualisieren
+      await this.updateStatus(user.uid, 'online');
+      
+      // Bereinige den Redirect-Status
+      localStorage.removeItem('redirectInProgress');
+      
+      return true;
+    } catch (error) {
+      console.error('Fehler beim Verarbeiten des Auth-States:', error);
+      localStorage.removeItem('redirectInProgress');
+      return false;
+    }
+  } else if (redirectPending) {
+    console.log('Redirect im Gange, aber kein Benutzer. Warte...');
+    return false;
+  } else if (currentUser) {
+    console.log('Benutzer bereits angemeldet, kein Redirect nötig');
+    return false;
+  } else {
+    console.log('Kein Benutzer angemeldet, kein Redirect im Gange');
+    return false;
+  }
+}
 
-        setTimeout(() => {
-          this.LogInAuth.setLoginSuccessful(false);
-        }, 1500);
+  async initializeAuth() {
+  const auth = getAuth();
+  
+  // Auf Auth-State-Change hören
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      console.log('Benutzer ist angemeldet:', user);
+      
+      // Prüfen, ob der Benutzer von einem Redirect kommt
+      if (localStorage.getItem('redirectInProgress') === 'true') {
+        console.log('Auth-State-Change nach Redirect, verarbeite...');
+        await this.handleAuthState();
+      }
+    }
+  });
+  
+  // Auch explizit prüfen, ob ein Auth-State vorliegt
+  const result = await this.handleAuthState();
+  
+  // Optional: Auch nach dem Redirect-Ergebnis suchen, falls der Auth-State nicht ausreicht
+  if (!result) {
+    try {
+      const redirectResult = await getRedirectResult(getAuth());
+      if (redirectResult) {
+        // Verarbeite das Redirect-Ergebnis separat
+        console.log('Redirect-Ergebnis gefunden, verarbeite...');
+        // ... Verarbeitung ähnlich wie in handleAuthState
       }
     } catch (error) {
       console.error('Fehler beim Verarbeiten des Redirect-Ergebnisses:', error);
     }
   }
+}
 
   async addGoogleUserToFirestore(user: User) {
     const userRef = doc(this.firestore, 'users', user.uid);
