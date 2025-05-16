@@ -1,7 +1,12 @@
-import { Injectable, inject } from '@angular/core';
-import { getAuth, signInWithPopup, signOut } from '@angular/fire/auth';
+import { Injectable, OnInit, inject } from '@angular/core';
+import { getAuth, signOut } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import { GoogleAuthProvider, signInAnonymously } from 'firebase/auth';
+import {
+  GoogleAuthProvider,
+  signInAnonymously,
+  signInWithRedirect,
+  getRedirectResult,
+} from 'firebase/auth';
 import { User } from '../models/user.class';
 import {
   Firestore,
@@ -25,7 +30,7 @@ import { GlobalVariableService } from './global-variable.service';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService {
+export class AuthService implements OnInit {
   router = inject(Router);
   user: User = new User();
   firestore = inject(Firestore);
@@ -48,6 +53,10 @@ export class AuthService {
         await this.updateStatus(currentUser.uid, 'offline');
       }
     });
+  }
+
+  ngOnInit(): void {
+    
   }
 
   initAuthListener() {
@@ -91,40 +100,48 @@ export class AuthService {
   }
 
   async googleLogIn() {
-    const auth = getAuth();
     const provider = new GoogleAuthProvider();
-    provider.addScope('email'); 
+    const auth = getAuth();
+    provider.addScope('email');
+
+    signInWithRedirect(auth, provider);
+  }
+
+  async handleRedirectResult() {
+    console.log('Hello from redirect')
+    const auth = getAuth();
     try {
-      const result = await signInWithPopup(auth, provider);
-      const currentUser = auth.currentUser;
-  
-      if (currentUser) {
-        const googleProviderData = result.user.providerData.find(
+      const result = await getRedirectResult(auth);
+
+      if (result) {
+        const user = result.user;
+        const googleProviderData = user.providerData.find(
           (data) => data.providerId === 'google.com'
         );
         const email = googleProviderData?.email;
 
-        if (result.user.photoURL) {
-          localStorage.setItem(`userPhoto_${result.user.uid}`, result.user.photoURL);
+        if (user.photoURL) {
+          localStorage.setItem(`userPhoto_${user.uid}`, user.photoURL);
         }
-        
+
         this.user = new User({
-          picture: result.user.photoURL,
-          uid: result.user.uid,
-          name: result.user.displayName,
+          picture: user.photoURL,
+          uid: user.uid,
+          name: user.displayName,
           email: email,
         });
-        this.addGoogleUserToFirestore(this.user);
+
+        await this.addGoogleUserToFirestore(this.user);
         this.globalVariable.googleAccountLogIn = true;
         this.LogInAuth.setLoginSuccessful(true);
         this.router.navigate(['/welcome', this.user.uid]);
-  
+
         setTimeout(() => {
           this.LogInAuth.setLoginSuccessful(false);
         }, 1500);
       }
     } catch (error) {
-      console.error('Fehler beim Login:', error);
+      console.error('Fehler beim Verarbeiten des Redirect-Ergebnisses:', error);
     }
   }
 
@@ -133,7 +150,10 @@ export class AuthService {
     await setDoc(userRef, {
       name: user.name,
       email: user.email,
-      picture: user.picture || localStorage.getItem(`userPhoto_${user.uid}`) || '../../assets/img/avatar/avatar4.png',
+      picture:
+        user.picture ||
+        localStorage.getItem(`userPhoto_${user.uid}`) ||
+        '../../assets/img/avatar/avatar4.png',
     });
   }
 
@@ -161,7 +181,7 @@ export class AuthService {
 
   async SignGuestIn() {
     const auth = getAuth();
-   /*  this.globalVariable.isGuest = true; */
+    /*  this.globalVariable.isGuest = true; */
     try {
       const result = await signInAnonymously(auth);
       const guestUser = new User({
