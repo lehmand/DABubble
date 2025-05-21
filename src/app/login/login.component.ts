@@ -57,9 +57,20 @@ export class LoginComponent implements OnInit {
   overlayStatusService = inject(OverlayStatusService);
   global = inject(GlobalVariableService);
   googleUserUid: any = ''
+  isMobile: boolean = false;
   constructor() { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.checkView();
+    this.isMobile = window.innerWidth <= 575 ? true : false; 
+  }
+  
+  checkView() {
+    window.addEventListener('resize', () => {
+      this.isMobile = window.innerWidth <= 575 ? true : false;
+      console.log(this.isMobile)
+    })    
+  }
 
   async onSubmit(ngForm: NgForm) {
     if (ngForm.submitted && ngForm.form.valid) {
