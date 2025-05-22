@@ -47,7 +47,7 @@
 
 .btn-primary-disabled {
   font-family: "Nunito";
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   border-radius: 25px;
   padding: 6px 12px;
@@ -60,7 +60,7 @@
 
 .btn-secondary {
   font-family: "Nunito";
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   border-radius: 25px;
   border: 1px solid #797ef3;
@@ -104,4 +104,12 @@
   color: #686868;
   text-align: center;
   cursor: pointer;
+}
+
+@media (min-width: 575px) {
+  .btn-primary-disabled,
+  .btn-secondary {
+    padding: 12px 25px;
+    font-size: 18px;
+  }
 }

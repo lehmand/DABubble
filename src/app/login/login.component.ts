@@ -68,7 +68,6 @@ export class LoginComponent implements OnInit {
   checkView() {
     window.addEventListener('resize', () => {
       this.isMobile = window.innerWidth <= 575 ? true : false;
-      console.log(this.isMobile)
     })    
   }
 

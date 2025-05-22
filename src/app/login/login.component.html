@@ -52,17 +52,19 @@
                     <div class="line"></div>
                     <div class="oder">ODER</div>
                 </div>
-                <div class="google-login">
-                    <button (click)="googleLogIn()" class="google-button">
-                        <img src="./../../assets/img/google.svg" class="google-logo">
-                        <p>Anmelden mit Google</p>
-                    </button>
-                </div>
-
-                <div class="button-flex-box">
-                    <button class="btn-primary-disabled" type="submit" value="submit"
-                        [disabled]="loginForm.invalid">Anmelden</button>
-                    <button (click)="guestLogin()" class="btn-secondary">Gäste-Login</button>
+                <div class="login-buttons">
+                    <div class="google-login">
+                        <button (click)="googleLogIn()" class="google-button">
+                            <img src="./../../assets/img/google.svg" class="google-logo">
+                            <p>Anmelden mit Google</p>
+                        </button>
+                    </div>
+    
+                    <div class="button-flex-box">
+                        <button class="btn-primary-disabled" type="submit" value="submit"
+                            [disabled]="loginForm.invalid">Anmelden</button>
+                        <button (click)="guestLogin()" class="btn-secondary">Gäste-Login</button>
+                    </div>
                 </div>
             </form>
         </div>
