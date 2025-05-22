@@ -25,6 +25,7 @@ import { LoginAuthService } from '../services/login-auth.service';
 import { OverlayStatusService } from '../services/overlay-status.service';
 // import { GlobalService } from '../global.service';
 import { GlobalVariableService } from '../services/global-variable.service';
+import { MobileService } from '../services/mobile.service';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -49,6 +50,7 @@ export class LoginComponent implements OnInit {
   firestore = inject(Firestore);
   auth = inject(AuthService);
   router = inject(Router);
+  mobileService = inject(MobileService)
   emailLoginFailed = false;
   formFailed = false;
   isGuestLogin = false;
@@ -58,18 +60,15 @@ export class LoginComponent implements OnInit {
   global = inject(GlobalVariableService);
   googleUserUid: any = ''
   isMobile: boolean = false;
+
+
   constructor() { }
 
   ngOnInit() {
-    this.checkView();
-    this.isMobile = window.innerWidth <= 575 ? true : false; 
-  }
-  
-  checkView() {
-    window.addEventListener('resize', () => {
-      this.isMobile = window.innerWidth <= 575 ? true : false;
-    })    
-  }
+    this.mobileService.isMobile$.subscribe(flag => {
+      this.isMobile = flag;
+    });
+  }  
 
   async onSubmit(ngForm: NgForm) {
     if (ngForm.submitted && ngForm.form.valid) {

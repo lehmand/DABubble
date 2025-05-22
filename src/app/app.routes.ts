@@ -11,7 +11,7 @@ import { HomeComponent } from './home/home.component';
 export const routes: Routes = [
     { path: 'welcome/:id', component: HomeComponent },
     { path: '', component: LoginComponent },
-    { path: 'create-account', component: CreateAccountComponent },
+    { path: 'create', component: CreateAccountComponent },
     { path: 'avatar/:id', component: AvatarComponent },
     { path: 'reset-password', component: ResetPasswordComponent },
     { path: 'create-new-password', component: CreateNewPasswordComponent },

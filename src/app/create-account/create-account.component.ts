@@ -16,6 +16,7 @@ import {
   sendEmailVerification,
 } from '@angular/fire/auth';
 import { MatCardModule, MatCardContent } from '@angular/material/card';
+import { MobileService } from '../services/mobile.service';
 
 @Component({
   selector: 'app-create-account',
@@ -33,13 +34,14 @@ import { MatCardModule, MatCardContent } from '@angular/material/card';
   styleUrl: './create-account.component.scss',
 })
 export class CreateAccountComponent implements OnInit {
-  userError = false;
+  userError: boolean = false;
   isHovered: boolean = false;
   isClicked: boolean = false;
   isChecked: boolean = false;
   firestore: Firestore = inject(Firestore);
   router: Router = inject(Router);
   auth = getAuth();
+  mobileService = inject(MobileService)
   userData = {
     name: '',
     email: '',
@@ -47,11 +49,16 @@ export class CreateAccountComponent implements OnInit {
     privacyPolicy: false,
   };
   newUser: User = new User();
-  linkWasSend = false;
+  linkWasSend: boolean = false;
+  isMobile: boolean = false;
 
   constructor(private route: ActivatedRoute) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.mobileService.isMobile$.subscribe(flag => {
+      this.isMobile = flag;
+    });
+  }
 
   onSubmit(ngForm: NgForm) {
     if (ngForm.submitted && ngForm.form.valid) {
