@@ -50,6 +50,7 @@ header {
     justify-content: center;
     align-items: center;
     border-radius: 100%;
+    padding: 4px;
     &:hover {
       background-color: rgb(236, 238, 254);
       cursor: pointer;
@@ -69,6 +70,7 @@ header {
   display: flex;
   justify-content: space-between;
   width: 100%;
+  align-items: center;
 }
 
 .sub-header {
