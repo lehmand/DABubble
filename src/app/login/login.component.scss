@@ -339,6 +339,12 @@ input[type="text"]:focus::placeholder {
       height: 70px
     }
   }
+  .oder-part {
+    margin: 24px 0;
+  }
+  .login-buttons {
+    gap: 32px
+  }
 }
 
 @media (min-width: 767px) {
@@ -353,10 +359,12 @@ input[type="text"]:focus::placeholder {
   .input-wrapper {
     gap: 24px;
   }
-  .oder-part {
-    margin: 24px 0;
+  .google-button {
+    p {
+      font-size: 18px;
+    }
   }
-  .login-buttons {
-    gap: 32px
+  .input-styling {
+    font-size: 16px;
   }
 }
