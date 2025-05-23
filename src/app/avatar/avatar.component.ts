@@ -13,6 +13,7 @@ import {
   getDownloadURL,
 } from '@angular/fire/storage';
 import { UserService } from '../services/user.service';
+import { MobileService } from '../services/mobile.service';
 
 @Component({
   selector: 'app-avatar',
@@ -25,16 +26,18 @@ export class AvatarComponent implements OnInit {
   firestore = inject(Firestore);
   route = inject(ActivatedRoute);
   router: Router = inject(Router);
+  storage = inject(Storage);
+  mobileService = inject(MobileService);
   choosePicture: string = '';
   userId: any | null = null;
   chooseOwnPicture: any;
-  storage = inject(Storage);
   previewUrl: string | undefined;
   selectedFile: File | null = null;
   nameObject: any = {};
   sendInfo: boolean = false;
   userService = inject(UserService);
   defaultPicture: any | null = '../../assets/img/picture_frame.png';
+  isMobile: boolean = false;
 
   avatarBox: string[] = [
     '../../assets/img/avatar/avatar1.png',
@@ -64,6 +67,13 @@ export class AvatarComponent implements OnInit {
     this.userId = this.route.snapshot.paramMap.get('id');
     if (this.userId) {
       this.getUserById(this.userId);
+    }
+    this.mobileService.isMobile$.subscribe(flag => {
+      this.isMobile = flag;
+    });
+
+    this.nameObject = {
+      name: 'Daniel Lehmann'
     }
   }
 

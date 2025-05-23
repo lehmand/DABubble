@@ -6,61 +6,37 @@
   background-color: #eceefe;
   flex-direction: column;
   position: relative;
+  gap: 48px;
 }
 
 .image-box {
-  position: absolute;
-  top: 75px;
-  left: 75px;
   display: flex;
   align-items: center;
   gap: 16px;
 
   img {
-    height: 70px;
+    height: 56px;
   }
 }
 
 .main-card {
   border-radius: 30px;
-  width: 90%;
   max-width: 606px;
-  max-height: 669px;
-  margin-top: 77px;
-}
-
-.mat-card {
-  border: none;
-  box-shadow: 0px 2px 10px 0px #00000014;
-  padding: 40px 0px;
-  background-color: #ffffff;
-  border-radius: 30px;
-}
-
-.card-content {
-  padding: 0;
-}
-
-.mat-mdc-card-content:first-child {
-  padding-top: 0;
-}
-
-.mat-mdc-card-content:last-child {
-  padding-bottom: 0;
+  background-color: white;
+  padding: 30px;
 }
 
 .title-div {
-  padding-left: 32px;
   display: flex;
-  align-items: center;
-  gap: 19px;
-  margin: 0 auto;
-
+  align-items: flex-start;
+  justify-content: space-around;
+  text-align: center;
+  max-width: 312px;
+  width: 100%;
   h1 {
-    font-size: 46px;
+    font-size: 32px;
     font-weight: 700;
     color: #444df2;
-    line-height: 55.2px;
     cursor: default;
   }
 }
@@ -94,33 +70,29 @@
 }
 
 .main-picture-box {
-  padding: 0 67px;
   display: flex;
   flex-direction: column;
+  gap: 24px;
 }
 
 .picture-frame {
   display: flex;
   justify-content: center;
-  margin: 0 auto;
   img {
-    width: 168px;
-    height: 168px;
+    height: 120px;
+    width: 120px;
     border-radius: 90px;
+    &:hover {
+      box-sizing: border-box;
+      outline: 7px solid #e6e6e6;
+      border-radius: 100%;
+      cursor: pointer;
+    }
   }
 
-  &:hover {
-    box-sizing: border-box;
-    outline: 7px solid #e6e6e6;
-    border-radius: 100%;
-    cursor: pointer;
-  }
 }
 
 .user-name {
-  text-align: center;
-  margin-top: 32px;
-
   h2 {
     color: #000000;
     font-size: 32px;
@@ -140,12 +112,11 @@
 }
 
 .avatar-box {
-  margin-top: 16px;
   display: flex;
+  justify-content: center;
   gap: 8px;
   img {
-    height: 64px;
-    width: 64px;
+    height: 36px;
     border-radius: 100%;
     &:hover {
       box-sizing: border-box;
@@ -159,7 +130,6 @@
 
 .added-avatar {
   display: flex;
-  margin-top: 36px;
   gap: 24px;
 }
 
@@ -192,14 +162,10 @@ label {
   }
 }
 
-.input-box {
-  margin-top: 80px;
-}
 
 .button-box {
   display: flex;
   justify-content: flex-end;
-  margin-top: 22px;
 }
 
 .btn-primary:hover {
@@ -229,9 +195,7 @@ label {
   a {
     text-decoration: none;
     font-size: 18px;
-    line-height: 18px;
     font-weight: 400;
-    margin-left: 30px;
     color: #797ef3;
     padding: 10px 15px;
 
@@ -243,19 +207,6 @@ label {
       color: #444df2;
     }
   }
-}
-
-.avatar-abstract-title {
-  display: none;
-}
-
-.avatar-h1-second {
-  text-align: center;
-  margin-left: -56px;
-}
-
-.avatar-h1 {
-  margin-left: -60px;
 }
 
 .email-sended-info {
@@ -319,167 +270,10 @@ label {
   font-size: 22px; 
 }
 
-@media (max-width: 1349px) {
-  .email-sended-info {
-    padding: 10px 10px;
-    top: 92%;
-    right: -71px;
-  }
-
-  .email-card-content {
-    span {
-      font-size: 22px;
-    }
-
+@media (min-width: 428px){
+  .avatar-box {
     img {
-      width: 20px;
-      height: 20px;
-    }
-  }
-}
-
-@media (max-width: 650px) {
-  .email-sended-info {
-    padding: 5px 5px;
-    top: 95%;
-    right: -83px;
-  }
-
-  .email-card-content {
-    gap: 11px;
-    span {
-      font-size: 16px;
-    }
-
-    img {
-      width: 20px;
-      height: 20px;
-    }
-  }
-}
-
-@media (max-width: 610px) {
-  .email-sended-info {
-    padding: 5px 5px;
-    top: 93%;
-    right: -83px;
-  }
-}
-
-@media (max-width: 860px) {
-  .image-box {
-    position: absolute;
-    top: 25px;
-    left: unset;
-
-    img {
-      width: 204px;
       height: 56px;
-    }
-  }
-}
-
-@media (max-width: 650px) {
-  .email-sended-info {
-    padding: 5px 5px;
-    top: 95%;
-    right: -83px;
-  }
-
-  .email-card-content {
-    gap: 11px;
-    span {
-      font-size: 16px;
-    }
-
-    img {
-      width: 20px;
-      height: 20px;
-    }
-  }
-}
-
-@media (max-width: 610px) {
-  .email-sended-info {
-    padding: 5px 5px;
-    top: 93%;
-    right: -83px;
-  }
-}
-
-@media (max-width: 679px) {
-  .main-picture-box {
-    padding: 0 21px;
-  }
-
-  .title-div {
-    padding-left: 10px;
-  }
-}
-
-@media (max-width: 610px) {
-  .title-div {
-    h1 {
-      font-size: 32px;
-    }
-  }
-
-  .picture-frame {
-    img {
-      width: 120px;
-      height: 120px;
-    }
-  }
-
-  .avatar-box {
-    img {
-      width: 48px;
-      height: 48px;
-    }
-  }
-
-  @media (max-width: 578px) {
-    label {
-      padding: 7px 9px;
-    }
-  }
-}
-
-@media (max-width: 543px) {
-  .picture-info-text {
-    font-size: 16px;
-  }
-
-  .user-info {
-    font-size: 16px;
-  }
-}
-
-@media (max-width: 458px) {
-  .mat-card {
-    padding: 26px 0;
-  }
-
-  .avatar-title {
-    display: none;
-  }
-
-  .avatar-abstract-title {
-    display: flex;
-    flex-direction: column;
-    margin: 0 auto;
-  }
-
-  .title-div {
-    align-items: baseline;
-  }
-}
-
-@media (max-width: 389px) {
-  .avatar-box {
-    img {
-      width: 40px;
-      height: 40px;
     }
   }
 }
