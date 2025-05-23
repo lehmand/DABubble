@@ -161,7 +161,6 @@ export class AuthService {
 
   async SignGuestIn() {
     const auth = getAuth();
-   /*  this.globalVariable.isGuest = true; */
     try {
       const result = await signInAnonymously(auth);
       const guestUser = new User({
@@ -178,13 +177,15 @@ export class AuthService {
         await setDoc(userRef, guestUser.toJSON());
       }
 
+      this.currentUser = auth.currentUser
+
       this.LogInAuth.setIsGuestLogin(true);
       this.overlayStatusService.setOverlayStatus(true);
       this.LogInAuth.setLoginSuccessful(true);
       setTimeout(() => {
         this.LogInAuth.setLoginSuccessful(false);
       }, 1500);
-      this.router.navigate(['/welcome', guestUser.uid]);
+      this.router.navigate(['/welcome']);
     } catch (error) {
       console.error('Error during anonymous sign-in:', error);
     }

@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { LoginAuthService } from '../services/login-auth.service';
 import { MatCardModule } from '@angular/material/card';
 import { Subscription } from 'rxjs';
+import { MobileService } from '../services/mobile.service';
 
 @Component({
   selector: 'app-home',
@@ -28,11 +29,12 @@ export class HomeComponent implements OnInit {
   selectedChannel: any;
   mentionUser: any;
   globalService = inject(GlobalVariableService);
+  LogInAuth = inject(LoginAuthService);
+  global = inject(GlobalVariableService);
+  mobileService = inject(MobileService)
   isThreadOpen = false;
   successfullyLogged = false;
-  LogInAuth = inject(LoginAuthService);
   private loginStatusSub: Subscription | undefined;
-  global = inject(GlobalVariableService);
   isGuestLogin = false;
   private guestLoginStatusSub: Subscription | undefined;
   onHeaderUser: any;
@@ -42,12 +44,17 @@ export class HomeComponent implements OnInit {
   isWorkspaceOpen: boolean = true;
   isHovered: boolean = false;
   @ViewChild(WorkspaceComponent) workspaceComponent!: WorkspaceComponent;
+  isMobile: boolean = false;
 
   ngOnInit(): void {
     this.subscribeToLoginStatus();
     this.subscribeToGuestLoginStatus();
     this.setDirectThread();
     this.setChannelThread();
+
+    this.mobileService.isMobile$.subscribe((flag) => {
+      this.isMobile = flag;
+    })
   }
 
   setDirectThread() {
@@ -137,13 +144,6 @@ export class HomeComponent implements OnInit {
       this.workspaceComponent.enterByUsername(user, false);
     }
   }
-  
-  
-
-
- /*  handleUserSelectionFromDirectThread(){
-
-  } */
 
   onThreadOpened() {
     this.isThreadOpen = true;
@@ -178,10 +178,6 @@ export class HomeComponent implements OnInit {
     return `../../assets/img/${state}-workspace-${variant}.png`;
   }
 
-   
-
-
-
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
       if(window.innerWidth>1200 && this.global.openChannelOrUserThread){
@@ -189,20 +185,16 @@ export class HomeComponent implements OnInit {
         this.global.checkWideChannelOrUserThreadBox=true;
       } else if(this.global.checkWideChannelorUserBox && window.innerWidth<=1200){
                 this.isWorkspaceOpen=false;
-                console.log('hallo')
       }else if(this.global.openChannelorUserBox && window.innerWidth>=1200){
                this.isWorkspaceOpen=false;
-               console.log('naxadep');
       } 
       else if(this.global.checkWideChannelOrUserThreadBox && window.innerWidth<=1200){
-                console.log('thread')
                 this.isWorkspaceOpen=false;
                 this.global.checkWideChannelorUserBox=false;
                 this.global.openChannelorUserBox =false;
                 this.global.openChannelOrUserThread=true;
       } else if(this.global.openChannelOrUserThread && window.innerWidth>=1200){
                 this.global.checkWideChannelOrUserThreadBox=true;
-                console.log('happy');
       }
   }
 }

@@ -98,6 +98,7 @@
   (click)="toggleWorkspace()"
   (mouseenter)="isHovered = true"
   (mouseleave)="isHovered = false"
+  *ngIf="!isMobile"
 >
   <p>
     {{

@@ -33,6 +33,7 @@ import { Subscription } from 'rxjs';
 import { LoginAuthService } from '../services/login-auth.service';
 import { AuthService } from '../services/auth.service';
 import { SelectionService } from '../services/selection.service';
+import { MobileService } from '../services/mobile.service';
 
 interface ChannelData {
   userIds: string[];
@@ -63,12 +64,18 @@ export class StartScreenComponent implements OnInit, OnChanges, OnDestroy {
   welcomeChannelSubscription: Subscription | undefined;
   currentUserwasSelected = false;
   contactWasSelected = false;
-  overlayStatusService = inject(OverlayStatusService);
   openMyProfile = false;
+  cdr = inject(ChangeDetectorRef);
+  LogInAuth = inject(LoginAuthService);
+  selection = inject(SelectionService)
+  userservice = inject(UserService);
+  dialog = inject(MatDialog);
+  overlayStatusService = inject(OverlayStatusService);
   firestore = inject(Firestore);
-  userId: any | null = null;
-  route = inject(ActivatedRoute);
   auth = inject(AuthService)
+  route = inject(ActivatedRoute);
+  mobileService = inject(MobileService);
+  userId: any | null = null;
   @Input() selectedUser: any;
   @Input() selectedChannel: any;
   @Input() mentionUser: string = '';
@@ -95,23 +102,19 @@ export class StartScreenComponent implements OnInit, OnChanges, OnDestroy {
   hoveredSenderName: any;
   hoveredCurrentUser: any;
   hoveredRecipienUser: any;
-  userservice = inject(UserService);
-  dialog = inject(MatDialog);
   showStickerDiv: any;
   checkUpdateBackcolor: any;
   isiconShow: any;
   selectFiles: any[] = [];
-  cdr = inject(ChangeDetectorRef);
-  LogInAuth = inject(LoginAuthService);
   @Output() threadOpened = new EventEmitter<void>();
   private loginStatusSub: Subscription | undefined;
   private guestLoginStatusSub: Subscription | undefined;
   loginAuthService = inject(LoginAuthService);
   enterChatByUser: any;
   private subscriptions: Subscription[] = [];
-  selection = inject(SelectionService)
   selectedUserSub: any;
   selectedChannselSub: any;
+  isMobile: boolean = false;
 
   ngAfterViewChecked() {
     this.cdr.detectChanges();
@@ -119,8 +122,7 @@ export class StartScreenComponent implements OnInit, OnChanges, OnDestroy {
   
   ngOnInit(): void {
     this.global.channelSelected = false;
-    this.userId = this.route.snapshot.paramMap.get('id');
-    this.user = this.userId;
+    this.userId = this.auth.currentUser.uid
     this.getcurrentUserById(this.userId);
     this.subscribeToProfileSelection();
     this.subscribeToWelcomeChannel();
@@ -137,6 +139,8 @@ export class StartScreenComponent implements OnInit, OnChanges, OnDestroy {
         this.selectedChannel = channel;
       })
     );
+
+    
   }
 
   ngOnDestroy(): void {

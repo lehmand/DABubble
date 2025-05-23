@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { LoginAuthService } from '../services/login-auth.service';
 import { Subscription } from 'rxjs';
+import { GlobalVariableService } from '../services/global-variable.service';
 
 @Component({
   selector: 'app-welcome-sheet',
@@ -14,6 +15,7 @@ export class WelcomeSheetComponent implements OnInit {
   isGuestAccount = false;
   LogInAuth = inject(LoginAuthService);
   private guestLoginStatusSub: Subscription | undefined;
+  globalService = inject(GlobalVariableService)
 
   ngOnInit(): void {
     this.subscribeToGuestLoginStatus();

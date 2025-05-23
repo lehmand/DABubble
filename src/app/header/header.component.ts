@@ -35,6 +35,7 @@ import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { GlobalVariableService } from '../services/global-variable.service';
+import { MobileService } from '../services/mobile.service';
 
 @Component({
   selector: 'app-header',
@@ -54,18 +55,19 @@ import { GlobalVariableService } from '../services/global-variable.service';
 export class HeaderComponent implements OnInit, OnDestroy {
   auth = inject(AuthService);
   firestore = inject(Firestore);
+  userservice = inject(UserService);
+  overlayStatusService = inject(OverlayStatusService);
+  global=inject(GlobalVariableService);
+  overlay = inject(OverlayStatusService);
+  mobileService = inject(MobileService);
   user: User = new User();
   userID: any;
-  userservice = inject(UserService);
   clicked = false;
   allUsers: User[] = [];
   unsub?: () => void;
-  overlayStatusService = inject(OverlayStatusService);
   overlayOpen = false;
   private overlayStatusSub!: Subscription;
   searcheNameOrChannel:string='';
-  global=inject(GlobalVariableService);
-  overlay = inject(OverlayStatusService);
   @Output() headerUserSelected = new EventEmitter<any>();
   getChannels:any[]=[];
   filterChannel:any[]=[];
@@ -79,9 +81,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @Output() headerChannelSelcted = new EventEmitter<any>();
   getAllUsersCollection:any[]=[];
   filteredUsers: any[] = [];
-  noUserFounded:boolean=false;
-  userIdHover:string='';
-
+  noUserFounded: boolean=false;
+  userIdHover: string='';
 
   constructor(private route: ActivatedRoute,private eRef: ElementRef ) {}
 
