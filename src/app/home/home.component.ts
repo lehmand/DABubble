@@ -45,6 +45,7 @@ export class HomeComponent implements OnInit {
   isHovered: boolean = false;
   @ViewChild(WorkspaceComponent) workspaceComponent!: WorkspaceComponent;
   isMobile: boolean = false;
+  
 
   ngOnInit(): void {
     this.subscribeToLoginStatus();

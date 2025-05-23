@@ -1,6 +1,6 @@
 <div class="background">
   <div class="card">
-    <div class="workspace-header">
+    <div class="workspace-header" *ngIf="!mobileService.isMobile$">
       <div class="left-side">
         <img src="../../assets/img/workspace-logo.png" alt="" />
         <h2>Devspace</h2>

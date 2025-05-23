@@ -16,9 +16,7 @@ z-index: 110;
 .full-page-content {
   height: 100vh;
   display: flex;
-  // justify-content: center;
   max-width: 2000px;
-  gap: 32px;
   width: 98%;
 }
 
@@ -125,7 +123,6 @@ app-thread {
 }
 
 .workspace-open {
-  width: 366px;
   transition: all 175ms ease-in-out;
 }
 
