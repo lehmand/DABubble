@@ -117,6 +117,7 @@ export class StartScreenComponent implements OnInit, OnChanges, OnDestroy {
   selectedUserSub: any;
   selectedChannselSub: any;
   isMobile: boolean = false;
+  @Output() welcomeClosed = new EventEmitter<void>();
 
   ngAfterViewChecked() {
     this.cdr.detectChanges();
@@ -163,6 +164,7 @@ export class StartScreenComponent implements OnInit, OnChanges, OnDestroy {
 
   onWelcomeClose() {
     this.afterLoginSheet = false;
+    this.welcomeClosed.emit();
   }
 
   ngOnDestroy(): void {

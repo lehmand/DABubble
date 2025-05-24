@@ -37,6 +37,7 @@
           handleChannelSelectionFromStartscreen($event)
         "
         (userSelected)="onUserSelected($event)"
+        (welcomeClosed)="onWelcomeClosed()"
         [onHeaderChannel]="onHeaderChannel"
         [onHeaderUser]="onHeaderUser"
         [selectedUser]="selectedUser"
@@ -98,9 +99,8 @@
   (click)="toggleWorkspace()"
   (mouseenter)="isHovered = true"
   (mouseleave)="isHovered = false"
-  *ngIf="!isMobile"
 >
-  <p>
+  <p *ngIf="!isMobile">
     {{
       !global.openChannelorUserBox && isWorkspaceOpen
         ? "Workspace-Menü schließen"

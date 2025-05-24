@@ -3,6 +3,7 @@ import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
 import { LoginAuthService } from '../services/login-auth.service';
 import { Subscription } from 'rxjs';
 import { GlobalVariableService } from '../services/global-variable.service';
+import { WorkspaceComponent } from '../workspace/workspace.component';
 
 @Component({
   selector: 'app-welcome-sheet',
@@ -31,6 +32,6 @@ export class WelcomeSheetComponent implements OnInit {
   }
 
   closeWelcomeScreen() {
-    this.closeWelcome.emit()
+    this.closeWelcome.emit();
   }
 }

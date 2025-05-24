@@ -100,11 +100,13 @@ export class HomeComponent implements OnInit {
     this.selectedChannel = null;
     this.selectedUser = user;
     this.globalService.clearCurrentChannel();
+    this.isWorkspaceOpen = false;
   }
 
   onChannelSelected(channel: any) {
     this.selectedChannel = channel;
     this.globalService.setCurrentChannel(channel);
+    this.isWorkspaceOpen = false;
   }
 
   handleUserSelectionFromStartscreen(user: any) {
@@ -153,6 +155,10 @@ export class HomeComponent implements OnInit {
   onThreadClosed() {
     this.isThreadOpen = false;
   }
+
+  onWelcomeClosed() {
+  this.isWorkspaceOpen = true;
+}
 
   toggleWorkspace() {
     if(window.innerWidth<=1200 && this.global.openChannelorUserBox){
