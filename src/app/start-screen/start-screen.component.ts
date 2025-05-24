@@ -69,12 +69,12 @@ export class StartScreenComponent implements OnInit, OnChanges, OnDestroy {
   openMyProfile = false;
   cdr = inject(ChangeDetectorRef);
   LogInAuth = inject(LoginAuthService);
-  selection = inject(SelectionService)
+  selection = inject(SelectionService);
   userservice = inject(UserService);
   dialog = inject(MatDialog);
   overlayStatusService = inject(OverlayStatusService);
   firestore = inject(Firestore);
-  auth = inject(AuthService)
+  auth = inject(AuthService);
   route = inject(ActivatedRoute);
   mobileService = inject(MobileService);
   userId: any | null = null;
@@ -121,20 +121,20 @@ export class StartScreenComponent implements OnInit, OnChanges, OnDestroy {
   ngAfterViewChecked() {
     this.cdr.detectChanges();
   }
-  
+
   ngOnInit(): void {
     this.global.channelSelected = false;
 
-    if(this.auth.currentUser?.uid) {
-      this.userId = this.auth.currentUser.uid
-      this.getcurrentUserById(this.userId)
+    if (this.auth.currentUser?.uid) {
+      this.userId = this.auth.currentUser.uid;
+      this.getcurrentUserById(this.userId);
     } else {
-      this.waitForAuthInitialization()
+      this.waitForAuthInitialization();
     }
     this.subscribeToProfileSelection();
     this.subscribeToWelcomeChannel();
     this.subscribeToLoginStatus();
-    
+
     this.subscriptions.push(
       this.selection.selectedUser$.subscribe((user) => {
         this.selectedUser = user;
@@ -149,17 +149,21 @@ export class StartScreenComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private waitForAuthInitialization() {
-  const auth = getAuth();
-  const unsubscribe = onAuthStateChanged(auth, (user) => {
-    if (user) {
-      this.userId = user.uid;
-      this.getcurrentUserById(this.userId);
-    } else {
-      console.log('No user logged in');
-    }
-    unsubscribe();
-  });
-}
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        this.userId = user.uid;
+        this.getcurrentUserById(this.userId);
+      } else {
+        console.log('No user logged in');
+      }
+      unsubscribe();
+    });
+  }
+
+  onWelcomeClose() {
+    this.afterLoginSheet = false;
+  }
 
   ngOnDestroy(): void {
     if (this.loginStatusSub) {
@@ -186,7 +190,7 @@ export class StartScreenComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-   subscribeToWelcomeChannel(): void {
+  subscribeToWelcomeChannel(): void {
     this.welcomeChannelSubscription = this.global.welcomeChannel$.subscribe(
       (welcomeChannelStatus) => {
         this.afterLoginSheet = welcomeChannelStatus;
@@ -376,18 +380,16 @@ export class StartScreenComponent implements OnInit, OnChanges, OnDestroy {
   onThreadOpened() {
     this.threadOpened.emit();
   }
-  
 
-  
   enterByUsername(user: any, isChannel: boolean = false) {
     this.enterChatByUser = user;
     this.selectedUser = this.enterChatByUser;
     if (isChannel) {
-      this.channelSelectedFromStartscreen.emit(user); 
-      this.global.setCurrentChannel(user); 
+      this.channelSelectedFromStartscreen.emit(user);
+      this.global.setCurrentChannel(user);
     } else {
       this.userSelectedFromStartscreen.emit(user);
-      this.global.clearCurrentChannel(); 
+      this.global.clearCurrentChannel();
     }
 
     this.checkProfileType();

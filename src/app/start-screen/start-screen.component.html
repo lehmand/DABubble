@@ -1,6 +1,6 @@
 <div class="full-page-content">
   <mat-card class="big-chat-card" appearance="outlined">
-    <div class="welcome-sheet" *ngIf="afterLoginSheet"><app-welcome-sheet></app-welcome-sheet></div>
+    <div class="welcome-sheet" *ngIf="afterLoginSheet"><app-welcome-sheet (closeWelcome)="onWelcomeClose()"></app-welcome-sheet></div>
     <mat-card-header class="header" *ngIf="global.isChannelMember || auth.isGuest || selectedUser">
 
       <div *ngIf="!afterLoginSheet" class="drop-down-div">

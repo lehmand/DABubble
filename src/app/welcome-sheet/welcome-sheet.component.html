@@ -1,7 +1,7 @@
 <div *ngIf="!isGuestAccount" class="full-page-content">
   <div class="headline">
     <h1>Herzlich Willkommen bei DaBubble!</h1>
-    <img src="/assets/img/close.svg" alt="" class="close-button" />
+    <img src="/assets/img/close.svg" alt="" class="close-button" (click)="closeWelcomeScreen()" />
   </div>
 
   <div class="mini-text">
@@ -106,7 +106,7 @@
 <div *ngIf="isGuestAccount" class="full-page-content">
     <div class="headline">
         <h1>Herzlich Willkommen bei DaBubble!</h1>
-        <img src="/assets/img/close.svg" alt="" class="close-button" />
+        <img src="/assets/img/close.svg" alt="" class="close-button" (click)="closeWelcomeScreen()"/>
     </div>
 
   <div class="mini-text">

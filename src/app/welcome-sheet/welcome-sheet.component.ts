@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
 import { LoginAuthService } from '../services/login-auth.service';
 import { Subscription } from 'rxjs';
 import { GlobalVariableService } from '../services/global-variable.service';
@@ -16,6 +16,7 @@ export class WelcomeSheetComponent implements OnInit {
   LogInAuth = inject(LoginAuthService);
   private guestLoginStatusSub: Subscription | undefined;
   globalService = inject(GlobalVariableService)
+  @Output() closeWelcome = new EventEmitter<void>();
 
   ngOnInit(): void {
     this.subscribeToGuestLoginStatus();
@@ -27,5 +28,9 @@ export class WelcomeSheetComponent implements OnInit {
         this.isGuestAccount = status;
       }
     );
+  }
+
+  closeWelcomeScreen() {
+    this.closeWelcome.emit()
   }
 }
