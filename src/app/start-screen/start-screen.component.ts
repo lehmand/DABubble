@@ -34,6 +34,8 @@ import { LoginAuthService } from '../services/login-auth.service';
 import { AuthService } from '../services/auth.service';
 import { SelectionService } from '../services/selection.service';
 import { MobileService } from '../services/mobile.service';
+import { getAuth } from '@angular/fire/auth';
+import { onAuthStateChanged } from '@firebase/auth';
 
 interface ChannelData {
   userIds: string[];
@@ -122,8 +124,13 @@ export class StartScreenComponent implements OnInit, OnChanges, OnDestroy {
   
   ngOnInit(): void {
     this.global.channelSelected = false;
-    this.userId = this.auth.currentUser.uid
-    this.getcurrentUserById(this.userId);
+
+    if(this.auth.currentUser?.uid) {
+      this.userId = this.auth.currentUser.uid
+      this.getcurrentUserById(this.userId)
+    } else {
+      this.waitForAuthInitialization()
+    }
     this.subscribeToProfileSelection();
     this.subscribeToWelcomeChannel();
     this.subscribeToLoginStatus();
@@ -139,9 +146,20 @@ export class StartScreenComponent implements OnInit, OnChanges, OnDestroy {
         this.selectedChannel = channel;
       })
     );
-
-    
   }
+
+  private waitForAuthInitialization() {
+  const auth = getAuth();
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    if (user) {
+      this.userId = user.uid;
+      this.getcurrentUserById(this.userId);
+    } else {
+      console.log('No user logged in');
+    }
+    unsubscribe();
+  });
+}
 
   ngOnDestroy(): void {
     if (this.loginStatusSub) {

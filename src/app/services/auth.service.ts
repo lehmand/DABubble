@@ -56,6 +56,7 @@ export class AuthService {
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         this.currentUser = user;
+        this.globalVariable.currentUserSubject.next(user)
         await this.updateStatus(user.uid, 'online');
         if (user.isAnonymous) {
           this.LogInAuth.setIsGuestLogin(true);
@@ -64,8 +65,13 @@ export class AuthService {
         }
       } else {
         this.currentUser = null;
+        this.globalVariable.currentUserSubject.next(null);
       }
     });
+  }
+
+  getCurrentUserId(): string | null {
+    return this.currentUser?.uid || null;
   }
 
   async deleteGuest(userId: any) {
@@ -144,6 +150,7 @@ export class AuthService {
       if (currentUser) {
         await this.updateStatus(currentUser.uid, 'offline');
         if (currentUser.isAnonymous) {
+          this.clearGuestUserFromLocalStorage();
           await deleteDoc(doc(this.firestore, 'users', currentUser.uid));
         }
         if (currentUser?.isAnonymous) {
@@ -177,6 +184,8 @@ export class AuthService {
         await setDoc(userRef, guestUser.toJSON());
       }
 
+      this.saveGuestUserToLocalStorage(guestUser);
+
       this.currentUser = auth.currentUser
 
       this.LogInAuth.setIsGuestLogin(true);
@@ -191,6 +200,50 @@ export class AuthService {
     }
     this.isGuest = true;
   }
+
+  private saveGuestUserToLocalStorage(guestUser: User) {
+  try {
+    localStorage.setItem('guestUser', JSON.stringify({
+      uid: guestUser.uid,
+      name: guestUser.name,
+      email: guestUser.email,
+      picture: guestUser.picture,
+      isGuest: true,
+      loginTime: new Date().getTime()
+    }));
+    
+    localStorage.setItem(`userPhoto_${guestUser.uid}`, guestUser.picture || '../../assets/img/avatar/avatar4.png');  
+    console.log('Guest user data saved to localStorage');
+  } catch (error) {
+    console.error('Error saving guest user to localStorage:', error);
+  }
+}
+
+loadGuestUserFromLocalStorage(): any {
+  try {
+    const guestData = localStorage.getItem('guestUser');
+    if (guestData) {
+      return JSON.parse(guestData);
+    }
+    return null;
+  } catch (error) {
+    console.error('Error loading guest user from localStorage:', error);
+    return null;
+  }
+}
+
+private clearGuestUserFromLocalStorage() {
+  try {
+    const guestData = this.loadGuestUserFromLocalStorage();
+    if (guestData) {
+      localStorage.removeItem('guestUser');
+      localStorage.removeItem(`userPhoto_${guestData.uid}`);
+      console.log('Guest user data cleared from localStorage');
+    }
+  } catch (error) {
+    console.error('Error clearing guest user from localStorage:', error);
+  }
+}
 
   async findUserByMail(identifier: string) {
     const usersCollection = collection(this.firestore, 'users');

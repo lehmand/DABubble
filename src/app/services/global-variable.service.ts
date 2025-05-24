@@ -46,6 +46,9 @@ export class GlobalVariableService {
   public channelThreadSubject = new BehaviorSubject<string | null>(null);
   channelThread$ = this.channelThreadSubject.asObservable();
 
+  public currentUserSubject = new BehaviorSubject<any>(null);
+  currentUser$ = this.currentUserSubject.asObservable();
+
   constructor() {}
 
   async setCurrentUserData(userData: any) {

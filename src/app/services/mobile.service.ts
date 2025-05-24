@@ -10,7 +10,7 @@ export class MobileService {
 
   constructor() {
     fromEvent(window, 'resize').pipe(
-      startWith(null), // um direkt einen ersten Wert zu feuern
+      startWith(null),
       map(() => window.innerWidth <= 575)
     ).subscribe(this.isMobile$);
    }

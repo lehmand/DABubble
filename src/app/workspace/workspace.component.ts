@@ -30,6 +30,7 @@ import { Channel } from '../models/channel.class';
 import { LoginAuthService } from '../services/login-auth.service';
 import { Subscription } from 'rxjs';
 import { SelectionService } from '../services/selection.service';
+import { MobileService } from '../services/mobile.service';
 
 @Component({
   selector: 'app-workspace',
@@ -45,6 +46,7 @@ export class WorkspaceComponent implements OnInit {
   userId: any | null = null;
   route = inject(ActivatedRoute);
   firestore = inject(Firestore);
+  mobileService = inject(MobileService);
   userData: any = {};
   allUsers: any = [];
   allChannels: Channel[] = [];
